@@ -28,7 +28,7 @@ class EditRecordActivity : MvpAppCompatActivity(), EditRecordView {
     val APP_PREFERENCES = "Settings"
     var mSettings: SharedPreferences? = null
     lateinit var editor: SharedPreferences.Editor
-    private var id_record = -1
+    private var id_record = -2
     private var headerCheck = ""
     private var contentCheck = ""
 

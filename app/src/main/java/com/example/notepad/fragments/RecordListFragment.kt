@@ -11,6 +11,8 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.domain.models.Records
@@ -23,6 +25,7 @@ import com.example.notepad.view.RecordListView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
+import kotlinx.android.synthetic.main.activity_edit_record.*
 import kotlinx.android.synthetic.main.fragment_record_list.*
 
 

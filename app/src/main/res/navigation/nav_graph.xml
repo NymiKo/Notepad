@@ -9,5 +9,14 @@
         android:id="@+id/recordListFragment"
         android:name="com.example.notepad.fragments.RecordListFragment"
         android:label="fragment_record_list"
-        tools:layout="@layout/fragment_record_list" />
+        tools:layout="@layout/fragment_record_list" >
+        <action
+            android:id="@+id/action_recordListFragment_to_aboutApplicationFragment"
+            app:destination="@id/aboutApplicationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutApplicationFragment"
+        android:name="com.example.notepad.fragments.AboutApplicationFragment"
+        android:label="fragment_about_application"
+        tools:layout="@layout/fragment_about_application" />
 </navigation>

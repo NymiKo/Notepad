@@ -17,12 +17,12 @@ class RecordListPresenter: MvpPresenter<RecordListView>() {
     val recordRepository = RecordRepositoryImpl(roomDatabase = roomDatabase)
 
     fun fetchRecords() {
+        viewState.presentLoading()
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val records = recordRepository.fetchRecords().await()
                 withContext(Dispatchers.Main) {
                     viewState.presentRecords(data = records)
-                    Log.e("CHECK", "Yes")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

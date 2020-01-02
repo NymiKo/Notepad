@@ -92,7 +92,12 @@ class RecordListFragment : MvpAppCompatFragment(), RecordListView{
         deleteRecord()
     }
 
+    override fun presentLoading() {
+        progressBarRecordList.visibility = View.VISIBLE
+    }
+
     override fun presentRecords(data: List<Records>) {
+        progressBarRecordList.visibility = View.GONE
         mAdapter.setData(newRecord = data)
     }
 

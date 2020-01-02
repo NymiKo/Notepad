@@ -17,6 +17,10 @@ import com.example.notepad.R
 import com.example.notepad.presenters.EditRecordPresenter
 import com.example.notepad.view.EditRecordView
 import kotlinx.android.synthetic.main.activity_edit_record.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,26 +67,30 @@ class EditRecordActivity : MvpAppCompatActivity(), EditRecordView {
     }
 
     override fun onBackPressed() {
-        if(checked_settings == false){
-            if (editContent.length() != 0 && (contentCheck != editContent.text.toString() || headerCheck != editHeader.text.toString())) {
-                val dialogDel = AlertDialog.Builder(this)
-                dialogDel.setTitle("Сохранение")
-                dialogDel.setMessage("Сохранить запись?")
-                dialogDel.setPositiveButton("Да", DialogInterface.OnClickListener() { dialog: DialogInterface, i: Int -> run{
+        when(checked_settings){
+            true -> {
+                if(editContent.length() != 0) {
                     saveRecord()
                 }
-                })
-                dialogDel.setNegativeButton("Нет", DialogInterface.OnClickListener(){ dialog: DialogInterface, i: Int -> run{
-                    finish()
-                }
-                })
-                dialogDel.show()
-            } else {
-                super.onBackPressed()
             }
-        } else {
-            saveRecord()
+            false -> {
+                if (editContent.length() != 0 && (contentCheck != editContent.text.toString() || headerCheck != editHeader.text.toString())) {
+                    val dialogDel = AlertDialog.Builder(this)
+                    dialogDel.setTitle("Сохранение")
+                    dialogDel.setMessage("Сохранить запись?")
+                    dialogDel.setPositiveButton("Да", DialogInterface.OnClickListener() { dialog: DialogInterface, i: Int -> run{
+                        saveRecord()
+                    }
+                    })
+                    dialogDel.setNegativeButton("Нет", DialogInterface.OnClickListener(){ dialog: DialogInterface, i: Int -> run{
+                        finish()
+                    }
+                    })
+                    dialogDel.show()
+                }
+            }
         }
+        super.onBackPressed()
     }
 
     override fun presentEditor(header: String,content: String) {

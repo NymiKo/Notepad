@@ -31,6 +31,7 @@ class EditRecordActivity : MvpAppCompatActivity(), EditRecordView {
     private var id_record = -2
     private var headerCheck = ""
     private var contentCheck = ""
+    private var checked_settings = true
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +45,8 @@ class EditRecordActivity : MvpAppCompatActivity(), EditRecordView {
         }
 
         editRecordPresenter.getRecord(id_record = id_record)
+
+        checked_settings = mSettings!!.getBoolean("dialog_save", false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -60,28 +63,32 @@ class EditRecordActivity : MvpAppCompatActivity(), EditRecordView {
     }
 
     override fun onBackPressed() {
-        if (editContent.length() != 0 && (contentCheck != editContent.text.toString() || headerCheck != editHeader.text.toString())) {
-            val dialogDel = AlertDialog.Builder(this)
-            dialogDel.setTitle("Сохранение")
-            dialogDel.setMessage("Сохранить запись?")
-            dialogDel.setPositiveButton("Да", DialogInterface.OnClickListener() { dialog: DialogInterface, i: Int -> run{
+        if(checked_settings == false){
+            if (editContent.length() != 0 && (contentCheck != editContent.text.toString() || headerCheck != editHeader.text.toString())) {
+                val dialogDel = AlertDialog.Builder(this)
+                dialogDel.setTitle("Сохранение")
+                dialogDel.setMessage("Сохранить запись?")
+                dialogDel.setPositiveButton("Да", DialogInterface.OnClickListener() { dialog: DialogInterface, i: Int -> run{
                     saveRecord()
                 }
-            })
-            dialogDel.setNegativeButton("Нет", DialogInterface.OnClickListener(){ dialog: DialogInterface, i: Int -> run{
+                })
+                dialogDel.setNegativeButton("Нет", DialogInterface.OnClickListener(){ dialog: DialogInterface, i: Int -> run{
                     finish()
                 }
-            })
-            dialogDel.show()
+                })
+                dialogDel.show()
+            } else {
+                super.onBackPressed()
+            }
         } else {
-            super.onBackPressed()
+            saveRecord()
         }
     }
 
     override fun presentEditor(header: String,content: String) {
         editHeader.visibility = View.VISIBLE
         editContent.visibility = View.VISIBLE
-        textLoading.visibility = View.GONE
+        progressBar.visibility = View.GONE
         editHeader.setText(header)
         editContent.setText(content)
         headerCheck = header
@@ -91,7 +98,7 @@ class EditRecordActivity : MvpAppCompatActivity(), EditRecordView {
     override fun presentLoading() {
         editHeader.visibility = View.GONE
         editContent.visibility = View.GONE
-        textLoading.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
     }
 
     @SuppressLint("SimpleDateFormat", "CommitPrefEdits")

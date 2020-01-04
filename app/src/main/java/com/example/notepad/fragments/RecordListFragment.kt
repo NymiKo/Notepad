@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -93,11 +95,11 @@ class RecordListFragment : MvpAppCompatFragment(), RecordListView{
     }
 
     override fun presentLoading() {
-        progressBarRecordList.visibility = View.VISIBLE
+        progressBarRecordList.visibility = VISIBLE
     }
 
     override fun presentRecords(data: List<Records>) {
-        progressBarRecordList.visibility = View.GONE
+        progressBarRecordList.visibility = GONE
         mAdapter.setData(newRecord = data)
     }
 
@@ -110,25 +112,24 @@ class RecordListFragment : MvpAppCompatFragment(), RecordListView{
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val dialogDel = AlertDialog.Builder(context)
-                dialogDel.setTitle("УДАЛЕНИЕ")
-                dialogDel.setMessage("Удалить запись?")
-                dialogDel.setPositiveButton("Да", DialogInterface.OnClickListener() { dialog: DialogInterface, i: Int -> run{
+                AlertDialog.Builder(context)
+                    .setTitle("УДАЛЕНИЕ")
+                    .setMessage("Удалить запись?")
+                    .setPositiveButton("Да") { dialog, which ->
                         val id: Int? = mAdapter.getId(viewHolder.adapterPosition)
                         Log.e("Error", id.toString())
                         mAdapter.onItemDismiss(viewHolder.adapterPosition)
                         recordListPresenter.deleteRecord(id_record = id!!)
                         Toast.makeText(activity?.applicationContext, "Запись удалена!", Toast.LENGTH_SHORT).show()
                     }
-                })
-                dialogDel.setNegativeButton("Нет", DialogInterface.OnClickListener(){ dialog: DialogInterface, i: Int -> run{
+                    .setNegativeButton("Нет") { dialog, which ->
                         val item = mAdapter.getItem(viewHolder.adapterPosition)
                         mAdapter.restoreItem(item, viewHolder.adapterPosition)
                         mAdapter.onItemDismiss(viewHolder.adapterPosition)
                         dialog.cancel()
                     }
-                })
-                dialogDel.show()
+                    .create()
+                    .show()
             }
         }
         mItemTouchHelper = ItemTouchHelper(callback)

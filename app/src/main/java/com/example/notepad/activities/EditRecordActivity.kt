@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.View.*
 import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -17,6 +18,7 @@ import com.example.notepad.R
 import com.example.notepad.presenters.EditRecordPresenter
 import com.example.notepad.view.EditRecordView
 import kotlinx.android.synthetic.main.activity_edit_record.*
+import kotlinx.android.synthetic.main.cell_record.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,43 +62,34 @@ class EditRecordActivity : MvpAppCompatActivity(), EditRecordView {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.saveRecord -> if(editContent.length() > 0 && (contentCheck != editContent.text.toString()
-                        || headerCheck != editHeader.text.toString())) saveRecord()
+            R.id.saveRecord -> saveRecord()
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
         when(checked_settings){
-            true -> {
-                if(editContent.length() != 0) {
-                    saveRecord()
-                }
-            }
+            true -> saveRecord()
             false -> {
-                if (editContent.length() != 0 && (contentCheck != editContent.text.toString() || headerCheck != editHeader.text.toString())) {
-                    val dialogDel = AlertDialog.Builder(this)
-                    dialogDel.setTitle("Сохранение")
-                    dialogDel.setMessage("Сохранить запись?")
-                    dialogDel.setPositiveButton("Да", DialogInterface.OnClickListener() { dialog: DialogInterface, i: Int -> run{
+                AlertDialog.Builder(this)
+                    .setTitle("Сохранение")
+                    .setMessage("Сохранить запись?")
+                    .setPositiveButton("Да") { dialog, which ->
                         saveRecord()
                     }
-                    })
-                    dialogDel.setNegativeButton("Нет", DialogInterface.OnClickListener(){ dialog: DialogInterface, i: Int -> run{
-                        finish()
+                    .setNegativeButton("Нет") { dialog, which ->
+                        super.onBackPressed()
                     }
-                    })
-                    dialogDel.show()
-                }
+                    .create()
+                    .show()
             }
         }
-        super.onBackPressed()
     }
 
     override fun presentEditor(header: String,content: String) {
-        editHeader.visibility = View.VISIBLE
-        editContent.visibility = View.VISIBLE
-        progressBar.visibility = View.GONE
+        editHeader.visibility = VISIBLE
+        editContent.visibility = VISIBLE
+        progressBar.visibility = GONE
         editHeader.setText(header)
         editContent.setText(content)
         headerCheck = header
@@ -104,29 +97,33 @@ class EditRecordActivity : MvpAppCompatActivity(), EditRecordView {
     }
 
     override fun presentLoading() {
-        editHeader.visibility = View.GONE
-        editContent.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
+        editHeader.visibility = GONE
+        editContent.visibility = GONE
+        progressBar.visibility = VISIBLE
     }
 
     @SuppressLint("SimpleDateFormat", "CommitPrefEdits")
     override fun saveRecord() {
         if(id_record >= 0) {
-            if(contentCheck != editContent.text.toString() || headerCheck != editHeader.text.toString()) {
-                editRecordPresenter.updateRecord(id_record = id_record, header = editHeader.text.toString(), content = editContent.text.toString(),
-                    date = SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()).toString())
-                Toast.makeText(applicationContext, "Изменения сохранены!", Toast.LENGTH_SHORT).show()
-            }
+            editRecordPresenter.updateRecord(id_record = id_record, header = editHeader.text.toString(), content = editContent.text.toString(),
+                date = SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()).toString(), contentCheck = contentCheck, headerCheck = headerCheck)
         } else {
             var count = mSettings!!.getInt("count", 0)
             editRecordPresenter.insertRecords(id_record = count, header = editHeader.text.toString(), content = editContent.text.toString(),
-                date = SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()).toString())
+                date = SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date()).toString(), contentLenght = editContent.text.length)
             count++
             editor = mSettings!!.edit()
             editor.putInt("count", count)
             editor.apply()
-            Toast.makeText(applicationContext, "Сохранено!", Toast.LENGTH_SHORT).show()
         }
         finish()
+    }
+
+    override fun showSuccessUpdateRecord() {
+        Toast.makeText(applicationContext, "Изменения сохранены!", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showSuccessInsertRecord() {
+        Toast.makeText(applicationContext, "Сохранено!", Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,10 +1,9 @@
 package com.example.notepad.di
 
 import android.app.Application
-import android.support.multidex.MultiDexApplication
 import com.example.data.storage.RoomDatabaseApp
 
-class App: MultiDexApplication() {
+class App: Application() {
     companion object {
         lateinit var roomDatabase: RoomDatabaseApp
     }

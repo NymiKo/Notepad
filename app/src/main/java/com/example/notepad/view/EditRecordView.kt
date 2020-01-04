@@ -6,4 +6,6 @@ interface EditRecordView: MvpView {
     fun presentEditor(header: String, content: String)
     fun presentLoading()
     fun saveRecord()
+    fun showSuccessUpdateRecord()
+    fun showSuccessInsertRecord()
 }

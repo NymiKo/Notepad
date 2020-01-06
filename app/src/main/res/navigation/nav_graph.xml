@@ -11,17 +11,9 @@
         android:label="fragment_record_list"
         tools:layout="@layout/fragment_record_list" >
         <action
-            android:id="@+id/action_recordListFragment_to_aboutApplicationFragment"
-            app:destination="@id/aboutApplicationFragment" />
-        <action
             android:id="@+id/action_recordListFragment_to_settingsApp"
             app:destination="@id/settingsApp" />
     </fragment>
-    <fragment
-        android:id="@+id/aboutApplicationFragment"
-        android:name="com.example.notepad.fragments.AboutApplicationFragment"
-        android:label="О приложении"
-        tools:layout="@layout/fragment_about_application" />
     <fragment
         android:id="@+id/settingsApp"
         android:name="com.example.notepad.fragments.SettingsApp"

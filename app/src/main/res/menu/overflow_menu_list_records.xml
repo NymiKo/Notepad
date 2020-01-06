@@ -5,6 +5,6 @@
         android:id="@+id/settingsApp"
         android:title="Настройки" />
     <item
-        android:id="@+id/aboutApplicationFragment"
+        android:id="@+id/aboutApplication"
         android:title="О приложении" />
 </menu>

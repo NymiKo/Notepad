@@ -1,5 +1,6 @@
 package com.example.notepad.activities
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -29,6 +30,16 @@ class MainActivity : MvpAppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val navController = Navigation.findNavController(this, R.id.navHostMain)
         NavigationUI.onNavDestinationSelected(item!!, navController)
+
+        when(item.itemId){
+            R.id.aboutApplication -> {
+                AlertDialog.Builder(this)
+                    .setMessage(R.string.application_version)
+                    .setNegativeButton("Ок", null)
+                    .create()
+                    .show()
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 }

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.SettingsApp">
+    tools:context=".fragments.SettingsApp"
+    android:background="#FFFFFF">
 
     <Switch
         android:id="@+id/switch_save_dialog"
